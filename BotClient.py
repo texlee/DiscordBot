@@ -1,10 +1,12 @@
 from discord.ext.commands import Bot, Context, CommandNotFound
 from food import get_food
 from birthday_class import is_birthday
+from reddit import get_reddit
+from meme import meme_of_the_day
 
 import random
 
-bot = Bot(command_prefix='!')
+bot = Bot(command_prefix='?')
 
 @bot.event
 async def on_command_error(ctx: Context, error):
@@ -15,6 +17,7 @@ async def on_command_error(ctx: Context, error):
 @bot.event
 async def on_ready():
     bot.loop.create_task(is_birthday(bot))
+    bot.loop.create_task(meme_of_the_day(bot, get_reddit()))
 
 @bot.command()
 async def food(ctx: Context, arg = None):

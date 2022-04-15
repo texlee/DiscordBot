@@ -3,7 +3,7 @@ from discord import Guild, utils, Role
 
 from dataclasses import dataclass
 from datetime import date
-import asyncio
+from asyncio import sleep
 import os
 
 @dataclass
@@ -39,10 +39,11 @@ async def is_birthday(bot: Bot):
         if names is not None:
             guild: Guild = bot.get_guild(int(os.getenv('DISCORD_GUILD_ID')))
             role: Role = utils.get(guild.roles, name='Everyone Jr')
+            channel_id = int(os.getenv('AYYLMAO_ID'))
             # Enable mention role
             await role.edit(mentionable=True)
-            await bot.get_channel(int(os.getenv('AYYLMAO_ID'))).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
+            await bot.get_channel(channel_id).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
             # Disable mention role
             await role.edit(mentionable=False)
 
-        await asyncio.sleep(86400) # sleeps for a whole day
+        await sleep(86400) # sleeps for a whole day

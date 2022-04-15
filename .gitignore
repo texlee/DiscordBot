@@ -130,3 +130,8 @@ dmypy.json
 
 # environment file
 .env
+
+# personal files
+channel_ids.txt
+test.py
+reddit_info.txt
