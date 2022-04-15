@@ -6,8 +6,6 @@ import random
 
 bot = Bot(command_prefix='!')
 
-allowed_commands = ['food']
-
 @bot.event
 async def on_command_error(ctx: Context, error):
     if isinstance(error, CommandNotFound):

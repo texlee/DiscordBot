@@ -1,10 +1,8 @@
-# import discord
 from BotClient import get_bot
 from dotenv import load_dotenv
 
 import os
 
-# intents = discord.Intents(messages=True, guilds=True, typing=True)
 bot = get_bot()
 
 def main():
