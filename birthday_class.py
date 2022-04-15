@@ -1,4 +1,3 @@
-from channel_ids import ayylmao_id
 from discord.ext.commands import Bot
 from discord import Guild, utils, Role
 
@@ -42,7 +41,7 @@ async def is_birthday(bot: Bot):
             role: Role = utils.get(guild.roles, name='Everyone Jr')
             # Enable mention role
             await role.edit(mentionable=True)
-            await bot.get_channel(ayylmao_id).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
+            await bot.get_channel(int(os.getenv('AYYLMAO_ID'))).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
             # Disable mention role
             await role.edit(mentionable=False)
 
