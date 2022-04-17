@@ -2,7 +2,7 @@ from discord.ext.commands import Bot
 from discord import Guild, utils, Role
 
 from dataclasses import dataclass
-from datetime import date
+import datetime
 from asyncio import sleep
 import os
 
@@ -34,16 +34,37 @@ class Birthdays:
 async def is_birthday(bot: Bot):
     data = Birthdays()
     while True:
-        today = str(date.today()).split('-')[1:]
+        # sleep until 12PM
+        t = datetime.datetime.today()
+        future = datetime.datetime(t.year,t.month,t.day,12,0)
+        if t.hour >= 12:
+            future += datetime.timedelta(days=1)
+        await sleep((future-t).total_seconds())
+        today = str(datetime.date.today()).split('-')[1:]
         names = data.is_today_birthday(today[0], today[1])
         if names is not None:
             guild: Guild = bot.get_guild(int(os.getenv('DISCORD_GUILD_ID')))
-            role: Role = utils.get(guild.roles, name='Everyone Jr')
-            channel_id = int(os.getenv('AYYLMAO_ID'))
-            # Enable mention role
-            await role.edit(mentionable=True)
-            await bot.get_channel(channel_id).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
-            # Disable mention role
-            await role.edit(mentionable=False)
+            print (f'Its somebodies birthday: {names}')
+            # role: Role = utils.get(guild.roles, name='Everyone Jr')
+            # channel_id = int(os.getenv('AYYLMAO_ID'))
+            # # Enable mention role
+            # await role.edit(mentionable=True)
+            # await bot.get_channel(channel_id).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
+            # # Disable mention role
+            # await role.edit(mentionable=False)
 
-        await sleep(86400) # sleeps for a whole day
+    # Old way
+    # while True:
+    #     today = str(date.today()).split('-')[1:]
+    #     names = data.is_today_birthday(today[0], today[1])
+    #     if names is not None:
+    #         guild: Guild = bot.get_guild(int(os.getenv('DISCORD_GUILD_ID')))
+    #         role: Role = utils.get(guild.roles, name='Everyone Jr')
+    #         channel_id = int(os.getenv('AYYLMAO_ID'))
+    #         # Enable mention role
+    #         await role.edit(mentionable=True)
+    #         await bot.get_channel(channel_id).send(f'Hey, {role.mention}.  It\'s {names}\'s birthday!! Wish them well! *smile*')
+    #         # Disable mention role
+    #         await role.edit(mentionable=False)
+
+    #     await sleep(86400) # sleeps for a whole day
