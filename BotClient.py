@@ -70,6 +70,10 @@ async def joke(ctx: Context):
         await ctx.send(f'{joke["delivery"]}')
 
 @bot.command()
+async def mac_test(ctx: Context):
+    await ctx.send("Sending from macbook")
+
+@bot.command()
 async def rps(ctx: Context):
     rock_id = '1'
     paper_id = '2'
