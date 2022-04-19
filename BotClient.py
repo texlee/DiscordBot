@@ -8,6 +8,8 @@ from jokeapi import Jokes
 from discord.ext.commands import Bot, Context, CommandNotFound
 from discord import Intents, Member
 
+from asyncprawcore import exceptions
+
 from discord_ui import Button, UI, receive
 
 from asyncio import sleep, TimeoutError
@@ -18,6 +20,7 @@ import random
 intents_input = Intents().all()
 bot = Bot(command_prefix='?', intents=intents_input)
 ui = UI(bot)
+reddit = None
 
 @bot.event
 async def on_command_error(ctx: Context, error):
@@ -28,7 +31,9 @@ async def on_command_error(ctx: Context, error):
 @bot.event
 async def on_ready():
     bot.loop.create_task(is_birthday(bot))
-    bot.loop.create_task(meme_of_the_day(bot, get_reddit()))
+    global reddit
+    reddit = get_reddit()
+    bot.loop.create_task(meme_of_the_day(bot, reddit))
 
 @bot.before_invoke
 async def write_command_call_to_file(ctx: Context):
@@ -70,8 +75,17 @@ async def joke(ctx: Context):
         await ctx.send(f'{joke["delivery"]}')
 
 @bot.command()
-async def mac_test(ctx: Context):
-    await ctx.send("Sending from macbook")
+async def top_reddit(ctx: Context, subreddit_str: str = ''):
+    if str == '':
+        await ctx.send('Please specify a subreddit.')
+        return
+
+    subreddit = await reddit.subreddit(subreddit_str)
+    try:
+        async for submission in subreddit.top(time_filter="day", limit=1):
+            await ctx.send(submission.shortlink)
+    except exceptions.Redirect as e:
+        await ctx.send(f'Unable to find subreddit: {subreddit_str}')
 
 @bot.command()
 async def rps(ctx: Context):
