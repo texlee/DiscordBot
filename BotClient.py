@@ -15,7 +15,6 @@ from threading import Lock
 import datetime
 import random
 
-# intents_input = Intents(members=True, dm_messages=True, guild_messages=True, guild_reactions=True, guilds=True, messages=True, typing=True)
 intents_input = Intents().all()
 bot = Bot(command_prefix='?', intents=intents_input)
 ui = UI(bot)
